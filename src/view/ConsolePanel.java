@@ -5,13 +5,14 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ConsoleThing extends JPanel {
+public class ConsolePanel extends JPanel {
 
 	private JTextField msgField;
 	
-	public ConsoleThing() {
+	public ConsolePanel() {
 		
 		msgField = new JTextField();
+		msgField.setEditable(false);
 		
 		setLayout(new BorderLayout());
 		add(msgField, BorderLayout.CENTER);

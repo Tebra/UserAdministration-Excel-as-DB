@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import model.TableModel;
 import data.ExcellDriver;
 
 /**
@@ -41,17 +42,17 @@ public class MainWindow {
 	private int tabCounter = 0;
 	private TablePanel tablePanel;
 	private SearchPanel searchPanel;
-	private ConsoleThing consoleMsg;
+	private ConsolePanel consoleMsg;
 
 	public MainWindow() {
 
-		frame = new JFrame("Medzlis Gazi Husrev-beg St. Gallen");
+		frame = new JFrame("Medzlis Gazi Husrev-beg St. Gallen | Administracija");
 		tabHolder = new JTabbedPane();
 		tab1 = new JPanel();
 		tab2 = new JPanel();
 		tablePanel = new TablePanel();
 		searchPanel = new SearchPanel();
-		consoleMsg = new ConsoleThing();
+		consoleMsg = new ConsolePanel();
 	}
 
 	public void createEverything() {
@@ -60,12 +61,15 @@ public class MainWindow {
 		mainWindow.createWindow();
 		mainWindow.createAndHandleItems();
 
-		/*
-		 * try { ExcellDriver.getConnection(); System.out.println("Connected");
-		 * } catch (Exception e) { e.printStackTrace(); }
-		 * 
-		 * System.out.println("Success");
-		 */
+		try {
+			ExcellDriver.getConnection();
+			System.out.println("Connected");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Success");
+
 	}
 
 	public void createWindow() {
@@ -123,15 +127,30 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 
 				String person = searchPanel.searchTextField.getText();
+				try {
+					tablePanel.setData(ExcellDriver.searchDatabase(person));
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Hallooooo geht nicht");
+					e1.printStackTrace();
+				}
+				tablePanel.refresh();
 			}
 		});
 
 		searchPanel.searchTextField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				/**
-				 * Suchoption noch implementieren !!
-				 */
+				
+				String person = searchPanel.searchTextField.getText();
+				try {
+					tablePanel.setData(ExcellDriver.searchDatabase(person));
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Hallooooo geht nicht");
+					e1.printStackTrace();
+				}
+				tablePanel.refresh();
 			}
 		}); // Bis hier. TextField ActionListener reagiert nur bei ENTER druck.
 
@@ -234,7 +253,7 @@ public class MainWindow {
 		menuBar.add(menu);
 
 		JMenuItem help;
-		help = new JMenuItem("Hilfe");
+		help = new JMenuItem("Excel uvezati");
 		menu.add(help);
 
 		return menuBar;

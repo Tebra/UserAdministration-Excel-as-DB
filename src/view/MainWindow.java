@@ -27,7 +27,7 @@ import model.TableModel;
 import data.ExcellDriver;
 
 /**
- * Administracioni program za Medzlis Islamske Zajednicde Gazi Husrev-beg
+ * Administracioni program za Medzlis Islamske Zajednice Gazi Husrev-beg
  * <p/>
  * Created by Rijad Zuzo on 15.06.2014.
  */
@@ -43,10 +43,12 @@ public class MainWindow {
 	private TablePanel tablePanel;
 	private SearchPanel searchPanel;
 	private ConsolePanel consoleMsg;
+	private NewMember newMember;
 
 	public MainWindow() {
 
-		frame = new JFrame("Medzlis Gazi Husrev-beg St. Gallen | Administracija");
+		frame = new JFrame(
+				"Medzlis Gazi Husrev-beg St. Gallen | Administracija");
 		tabHolder = new JTabbedPane();
 		tab1 = new JPanel();
 		tab2 = new JPanel();
@@ -61,14 +63,12 @@ public class MainWindow {
 		mainWindow.createWindow();
 		mainWindow.createAndHandleItems();
 
-		try {
-			ExcellDriver.getConnection();
-			System.out.println("Connected");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("Success");
+		/*
+		 * try { ExcellDriver.getConnection(); System.out.println("Connected");
+		 * } catch (Exception e) { e.printStackTrace(); }
+		 * 
+		 * System.out.println("Success");
+		 */
 
 	}
 
@@ -137,11 +137,11 @@ public class MainWindow {
 				tablePanel.refresh();
 			}
 		});
-
+		
 		searchPanel.searchTextField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				String person = searchPanel.searchTextField.getText();
 				try {
 					tablePanel.setData(ExcellDriver.searchDatabase(person));
@@ -155,25 +155,16 @@ public class MainWindow {
 		}); // Bis hier. TextField ActionListener reagiert nur bei ENTER druck.
 
 		searchPanel.acceptButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewMember newMember;
-				newMember = new NewMember();
-
-				searchPanel.acceptButton.setEnabled(false);
-				KeyboardFocusManager.getCurrentKeyboardFocusManager()
-						.clearGlobalFocusOwner();
+				newMember = new NewMember(frame);
 			}
 		});
 
 		searchPanel.declineButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				searchPanel.textArea.setText("");
-				KeyboardFocusManager.getCurrentKeyboardFocusManager()
-						.clearGlobalFocusOwner();
 			}
 		});
 
@@ -192,8 +183,10 @@ public class MainWindow {
 
 				tab2.removeAll();
 				tabHolder.removeTabAt(1);
-				// Because there is only one tab allowed, on tab closing the
-				// counter is reset.
+				/*
+				 * Because there is only one tab allowed, on tab closing the
+				 * counter is reset.
+				 */
 				tabCounter = 0;
 				KeyboardFocusManager.getCurrentKeyboardFocusManager()
 						.clearGlobalFocusOwner();
@@ -209,14 +202,14 @@ public class MainWindow {
 							user = tablePanel.table.getValueAt(
 									tablePanel.table.getSelectedRow(), 0)
 									.toString();
-							ExcellDriver treiber = new ExcellDriver();
-
 							tab2.add(new MemberInfo(), BorderLayout.CENTER);
 							tabHolder.addTab("Informacije:  ", tab2);
 
-							// For the Tab Header - A JPanel Containing a Label
-							// and a closing Button.
-							// Button behavior coded in createAndHandleItems()*.
+							/*
+							 * For the Tab Header - A JPanel Containing a Label
+							 * and a closing Button. Button behavior coded in
+							 * createAndHandleItems()*.
+							 */
 							JPanel tabHead = new JPanel();
 							tabHead.setLayout(new FlowLayout(FlowLayout.LEFT,
 									0, 0));
@@ -231,14 +224,7 @@ public class MainWindow {
 
 							// Only one tab can be active.
 							tabCounter++;
-
 							tabHolder.setSelectedIndex(tabCounter);
-							// System.out.println(table.getValueAt(table.getSelectedRow(),
-							// 0).toString());
-
-							KeyboardFocusManager
-									.getCurrentKeyboardFocusManager()
-									.clearGlobalFocusOwner();
 						}
 					}
 
@@ -258,6 +244,5 @@ public class MainWindow {
 
 		return menuBar;
 	}
-
-	// Class End
+	
 }

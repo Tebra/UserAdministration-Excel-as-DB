@@ -63,12 +63,14 @@ public class MainWindow {
 		mainWindow.createWindow();
 		mainWindow.createAndHandleItems();
 
-		/*
-		 * try { ExcellDriver.getConnection(); System.out.println("Connected");
-		 * } catch (Exception e) { e.printStackTrace(); }
-		 * 
-		 * System.out.println("Success");
-		 */
+		try {
+			ExcellDriver.getConnection();
+			System.out.println("Connected");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Success");
 
 	}
 
@@ -137,7 +139,7 @@ public class MainWindow {
 				tablePanel.refresh();
 			}
 		});
-		
+
 		searchPanel.searchTextField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -244,5 +246,5 @@ public class MainWindow {
 
 		return menuBar;
 	}
-	
+
 }

@@ -12,11 +12,13 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -44,6 +46,10 @@ public class MainWindow {
 	private SearchPanel searchPanel;
 	private ConsolePanel consoleMsg;
 	private NewMember newMember;
+	private String urlDB;
+
+	// To do isDbSet über Preference node auf true/false triggern bei
+	// einstellung der DB.
 
 	public MainWindow() {
 
@@ -63,11 +69,15 @@ public class MainWindow {
 		mainWindow.createWindow();
 		mainWindow.createAndHandleItems();
 
-		try {
-			ExcellDriver.getConnection();
-			System.out.println("Connected");
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (urlDB != null) {
+
+			try {
+				//TO DO urlDB als parameter übergeben lassen (Komplett Excel Driver umändren)
+				ExcellDriver.getConnection();
+				System.out.println("Connected");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		System.out.println("Success");
@@ -243,6 +253,21 @@ public class MainWindow {
 		JMenuItem help;
 		help = new JMenuItem("Excel uvezati");
 		menu.add(help);
+
+		help.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFileChooser excellChooser = new JFileChooser();
+				excellChooser.setDialogTitle("Odaberite vasu Excell Datoteku:");
+
+				int userSelection = excellChooser.showOpenDialog(null);
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+					urlDB = excellChooser.getSelectedFile().getAbsolutePath();
+					System.out.println(urlDB);
+				}
+			}
+		});
 
 		return menuBar;
 	}

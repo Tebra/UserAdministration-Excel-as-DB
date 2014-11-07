@@ -7,12 +7,13 @@ import javax.swing.JTextField;
 
 public class ConsolePanel extends JPanel {
 
-	private JTextField msgField;
+	public JTextField msgField;
 	
 	public ConsolePanel() {
 		
 		msgField = new JTextField();
 		msgField.setEditable(false);
+		msgField.setHorizontalAlignment(JTextField.RIGHT);
 		
 		setLayout(new BorderLayout());
 		add(msgField, BorderLayout.CENTER);

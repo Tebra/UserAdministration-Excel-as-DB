@@ -29,7 +29,7 @@ import model.TableModel;
 import data.ExcellDriver;
 
 /**
- * Administracioni program za Medzlis Islamske Zajednice Gazi Husrev-beg
+ * Administration Software using an Excel Sheet as DB
  * <p/>
  * Created by Rijad Zuzo on 15.06.2014.
  */
@@ -48,13 +48,11 @@ public class MainWindow {
 	private NewMember newMember;
 	private String urlDB;
 
-	// To do isDbSet über Preference node auf true/false triggern bei
-	// einstellung der DB.
+	// TO DO preference -> urlDB save
 
 	public MainWindow() {
 
-		frame = new JFrame(
-				"Medzlis Gazi Husrev-beg St. Gallen | Administracija");
+		frame = new JFrame("Administration Software");
 		tabHolder = new JTabbedPane();
 		tab1 = new JPanel();
 		tab2 = new JPanel();
@@ -72,8 +70,9 @@ public class MainWindow {
 		if (urlDB != null) {
 
 			try {
-				//TO DO urlDB als parameter übergeben lassen (Komplett Excel Driver umändren)
-				ExcellDriver.getConnection();
+				// TO DO urlDB als parameter übergeben lassen (Komplett Excel
+				// Driver umändren)
+				ExcellDriver.getConnection(urlDB);
 				System.out.println("Connected");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -99,18 +98,18 @@ public class MainWindow {
 		west = new JPanel();
 		west.setPreferredSize(new Dimension(150, 450));
 		west.setLayout(new FlowLayout(FlowLayout.LEFT));
-		west.setBorder(BorderFactory.createTitledBorder("Unos Podataka"));
+		west.setBorder(BorderFactory.createTitledBorder("Enter Name"));
 
 		tab2.setLayout(new BorderLayout());
 		tab1.setLayout(new BorderLayout());
-		tabHolder.addTab("Pronadjeno: ", tab1);
+		tabHolder.addTab("Found: ", tab1);
 
 		// ----------------------- --------------------------------//
 
 		JPanel center;
 		center = new JPanel();
 		center.setLayout(new BorderLayout());
-		center.setBorder(BorderFactory.createTitledBorder("Podatci:"));
+		center.setBorder(BorderFactory.createTitledBorder("Information:"));
 		center.add(tabHolder);
 
 		// ----------------------- --------------------------------//
@@ -139,14 +138,17 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 
 				String person = searchPanel.searchTextField.getText();
-				try {
-					tablePanel.setData(ExcellDriver.searchDatabase(person));
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					System.out.println("Hallooooo geht nicht");
-					e1.printStackTrace();
+				if (urlDB != null) {
+					try {
+						tablePanel.setData(ExcellDriver.searchDatabase(person,
+								urlDB));
+					} catch (Exception e1) {
+
+						System.out.println("Hallooooo geht nicht");
+						e1.printStackTrace();
+					}
+					tablePanel.refresh();
 				}
-				tablePanel.refresh();
 			}
 		});
 
@@ -155,14 +157,18 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 
 				String person = searchPanel.searchTextField.getText();
-				try {
-					tablePanel.setData(ExcellDriver.searchDatabase(person));
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					System.out.println("Hallooooo geht nicht");
-					e1.printStackTrace();
+				if (urlDB != null) {
+					try {
+						System.out.println(urlDB +" "+person);
+						tablePanel.setData(ExcellDriver.searchDatabase(person,
+								urlDB));
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						System.out.println("Hallooooo geht nicht");
+						e1.printStackTrace();
+					}
+					tablePanel.refresh();
 				}
-				tablePanel.refresh();
 			}
 		}); // Bis hier. TextField ActionListener reagiert nur bei ENTER druck.
 
@@ -215,7 +221,7 @@ public class MainWindow {
 									tablePanel.table.getSelectedRow(), 0)
 									.toString();
 							tab2.add(new MemberInfo(), BorderLayout.CENTER);
-							tabHolder.addTab("Informacije:  ", tab2);
+							tabHolder.addTab("Information:  ", tab2);
 
 							/*
 							 * For the Tab Header - A JPanel Containing a Label
@@ -226,7 +232,7 @@ public class MainWindow {
 							tabHead.setLayout(new FlowLayout(FlowLayout.LEFT,
 									0, 0));
 
-							JLabel label = new JLabel("Informacije: ");
+							JLabel label = new JLabel("Information: ");
 							label.setBorder(BorderFactory.createEmptyBorder(0,
 									0, 0, 7));
 
@@ -247,11 +253,11 @@ public class MainWindow {
 		JMenuBar menuBar = new JMenuBar();
 
 		JMenu menu;
-		menu = new JMenu("Hilfe");
+		menu = new JMenu("Help");
 		menuBar.add(menu);
 
 		JMenuItem help;
-		help = new JMenuItem("Excel uvezati");
+		help = new JMenuItem("Choose DB");
 		menu.add(help);
 
 		help.addActionListener(new ActionListener() {
@@ -259,12 +265,13 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				JFileChooser excellChooser = new JFileChooser();
-				excellChooser.setDialogTitle("Odaberite vasu Excell Datoteku:");
+				excellChooser.setDialogTitle("Choose your Excel Sheet:");
 
 				int userSelection = excellChooser.showOpenDialog(null);
 				if (userSelection == JFileChooser.APPROVE_OPTION) {
 					urlDB = excellChooser.getSelectedFile().getAbsolutePath();
 					System.out.println(urlDB);
+					consoleMsg.msgField.setText("Excel loaded");
 				}
 			}
 		});

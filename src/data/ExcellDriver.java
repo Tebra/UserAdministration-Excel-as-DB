@@ -16,9 +16,14 @@ import model.Member;
  */
 public class ExcellDriver {
 
-	public static Connection getConnection() throws Exception {
+	public static Connection getConnection(String urlDB) throws Exception {
 		String driver = "sun.jdbc.odbc.JdbcOdbcDriver";
-		String url = "jdbc:odbc:dataBase";
+		
+		if(urlDB!=null)
+		urlDB = urlDB.replace("\\", "/");
+		
+		System.out.println(urlDB);
+		String url ="jdbc:odbc:EJn; DBQ ="+urlDB+"";
 
 		String username = "";
 		String password = "";
@@ -26,24 +31,24 @@ public class ExcellDriver {
 		return DriverManager.getConnection(url, username, password);
 	}
 
-	public static void writePayment(String name, String data) throws Exception {
+	public static void writePayment(String name, String data, String urlDB) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 
-		conn = getConnection();
+		conn = getConnection(urlDB);
 		stmt = conn.createStatement();
-		String excelQuery = "insert into [Sheet $1] (";
+		//TO DO String excelQuery = "insert into [Sheet $1] (";
 	}
 
-	public static ArrayList<Member> searchDatabase(String user)
+	public static ArrayList<Member> searchDatabase(String user, String urlDB)
 			throws Exception {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		ArrayList<Member> db = new ArrayList<Member>();
 
-		conn = getConnection();
+		conn = getConnection(urlDB);
 		stmt = conn
 				.prepareStatement("SELECT * FROM [Sheet1$] WHERE Ime = ? OR Prezime = ?");
 		stmt.setString(1, user);
@@ -74,10 +79,10 @@ public class ExcellDriver {
 		return db;
 	}
 
-	public void addMember(Member member) throws Exception {
+	public void addMember(Member member, String urlDB) throws Exception {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		conn = getConnection();
+		conn = getConnection(urlDB);
 	}
 }

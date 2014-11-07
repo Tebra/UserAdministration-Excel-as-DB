@@ -23,14 +23,14 @@ public class SearchPanel extends JPanel {
 
 	public SearchPanel() {
 		textArea = new JTextArea();
-		acceptButton = new JButton("Pristupnica");
-		declineButton = new JButton("Odbiti");
-		searchButton = new JButton("Tra\u017ei");
+		acceptButton = new JButton("Membership");
+		declineButton = new JButton("Reset");
+		searchButton = new JButton("Search");
 		searchTextField = new JTextField();
 
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		setPreferredSize(new Dimension(150, 450));
-		setBorder(BorderFactory.createTitledBorder("Unos Podataka"));
+		setBorder(BorderFactory.createTitledBorder("Input"));
 
 		JPanel westSearch = new JPanel();
 		JPanel westMember = new JPanel();
@@ -55,11 +55,11 @@ public class SearchPanel extends JPanel {
 			}
 		});
 
-		westSearch.add(new JLabel("Pretraga"));
+		westSearch.add(new JLabel("Search for:"));
 		westSearch.add(searchTextField);
 		westSearch.add(searchButton);
 
-		westMember.add(new JLabel("Novi Clan"));
+		westMember.add(new JLabel("New Member"));
 		westMember.add(acceptButton);
 
 		add(westSearch);
